@@ -1,0 +1,69 @@
+C_FLAGS := -g -Wall -Wextra
+CC := gcc
+RM := rm
+
+.PHONY: $(TARGET) clean test
+
+VPATH:= ./src/ ./obj/ ./include/
+
+# Path for .c , .h and .o Files 
+SRC_PATH := ./src/
+OBJ_PATH := ./obj/
+INC_PATH := -I ./include
+BIN_PATH := ./bin
+
+# Executable Name 
+TARGET := $(BIN_PATH)/exe
+
+SYS_NAME := linux
+
+# Files to compile
+OBJ1 := main.o \
+        delete.o \
+	insert.o \
+	misc.o \
+	print_reverse.o \
+	reverse_list.o \
+	swap_alternate.o \
+	reverse_n_list.o \
+	view_list.o
+
+
+OBJ := $(patsubst %,$(OBJ_PATH)%,$(OBJ1))
+
+# Build .o first
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+		@echo [CC] $<
+		@$(CC) $(C_FLAGS) -o $@ -c $< $(INC_PATH)                  
+
+# Build final Binary
+$(TARGET):      $(OBJ)
+		@echo -e "\n[INFO] Creating Binary Executable [$(TARGET)]"
+		@$(CC) -o $@ $^ 
+
+# Clean all the object files and the binary
+clean:
+		@echo "[Cleaning]"
+		@$(RM) -rfv $(OBJ_PATH)*
+		@$(RM) -fv $(TARGET)
+
+test:
+	@if [ $(SYS_NAME) == linux ]; then \
+		echo "OS: Linux"; \
+		RESULT = others; \
+		echo "OS: Linux"; \
+	else \
+		echo "OS: Others"; \
+	fi
+
+	@echo -e "OS is [$(RESULT)]\n";
+
+mytest:
+
+	if [ linux-x86 = linux-x86 ]; then \
+		echo "temp1"; \
+	fi
+	if [ aix61 = linux-x86 ]; then \
+		echo "temp2"; \
+	fi
+
